@@ -25,7 +25,7 @@ public class Parser {
         return equality();
     }
 
-    private Expr DoTheThing(Supplier<Expr> operand, TokenType... types) {
+    private Expr ParseBinaryOperand(Supplier<Expr> operand, TokenType... types) {
         Expr expr = operand.get();
         while (match(types)) {
             Token operator = previous();
@@ -36,19 +36,19 @@ public class Parser {
     }
 
     private Expr equality() {
-        return DoTheThing(this::comparison, BANG_EQUAL, EQUAL_EQUAL);
+        return ParseBinaryOperand(this::comparison, BANG_EQUAL, EQUAL_EQUAL);
     }
 
     private Expr comparison() {
-        return DoTheThing(this::term, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL);
+        return ParseBinaryOperand(this::term, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL);
     }
 
     private Expr term() {
-        return DoTheThing(this::factor, MINUS, PLUS);
+        return ParseBinaryOperand(this::factor, MINUS, PLUS);
     }
 
     private Expr factor() {
-        return DoTheThing(this::unary, SLASH, STAR);
+        return ParseBinaryOperand(this::unary, SLASH, STAR);
     }
 
     private Expr unary() {
