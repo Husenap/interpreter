@@ -34,7 +34,7 @@ public class Lox {
     BufferedReader reader = new BufferedReader(input);
 
     while (true) {
-      System.out.println("> ");
+      System.out.print("\n> ");
       String line = reader.readLine();
       if (line == null)
         break;
