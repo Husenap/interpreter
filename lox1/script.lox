@@ -85,3 +85,12 @@ print "=============================";
     a = b;
   }
 }
+
+print "=============================";
+{
+  var t0 = clock();
+  for(var i = 0; i < 10000000; i = i + 1) {}
+  var t1 = clock();
+  print "Elapsed time: ";
+  print t1 - t0;
+}

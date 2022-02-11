@@ -1,5 +1,7 @@
 package com.github.husenap;
 
+import java.util.List;
+
 interface Expr {
   interface Visitor<R> {
     R visit(Assign expr);
@@ -15,6 +17,8 @@ interface Expr {
     R visit(Grouping expr);
 
     R visit(Variable expr);
+
+    R visit(Call expr);
   }
 
   <R> R accept(Visitor<R> v);
@@ -60,6 +64,12 @@ interface Expr {
   }
 
   record Variable(Token name) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
+  }
+  record Call(Expr callee, Token paren, List<Expr> arguments) implements Expr {
     @Override
     public <R> R accept(Visitor<R> v) {
       return v.visit(this);
