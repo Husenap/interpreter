@@ -15,6 +15,10 @@ interface Stmt {
         R visit(If stmt);
 
         R visit(While stmt);
+
+        R visit(Function stmt);
+
+        R visit(Return stmt);
     }
 
     abstract <R> R accept(Visitor<R> v);
@@ -53,6 +57,18 @@ interface Stmt {
         }
     }
     record While(Expr condition, Stmt body) implements Stmt {
+        @Override
+        public <R> R accept(Visitor<R> v) {
+            return v.visit(this);
+        }
+    }
+    record Function(Token name, List<Token> params, List<Stmt> body) implements Stmt {
+        @Override
+        public <R> R accept(Visitor<R> v) {
+            return v.visit(this);
+        }
+    }
+    record Return(Token keyword, Expr value) implements Stmt {
         @Override
         public <R> R accept(Visitor<R> v) {
             return v.visit(this);

@@ -89,8 +89,49 @@ print "=============================";
 print "=============================";
 {
   var t0 = clock();
-  for(var i = 0; i < 10000000; i = i + 1) {}
+  for(var i = 0; i < 10000; i = i + 1) {}
   var t1 = clock();
   print "Elapsed time: ";
   print t1 - t0;
+}
+
+print "=============================";
+{
+  fun caller(fn){
+    fn();
+  }
+
+  fun callMe(){
+    print "Yaaaay";
+  }
+
+  caller(callMe);
+}
+{
+  fun fib(n){
+    if(n <= 1) return n;
+    return fib(n-2)+fib(n-1);
+  }
+  for(var i = 0; i < 10; i = i + 1) print fib(i);
+}
+{
+  fun factorial(n){
+    if(n <= 1) return 1;
+    return n * factorial(n-1);
+  }
+  for(var i = 0; i < 10; i = i + 1) print factorial(i);
+}
+{
+  fun makeCounter(){
+    var i = 0;
+    fun count(){
+      i = i + 1;
+      print i;
+    }
+    return count;
+  }
+
+  var counter = makeCounter();
+  counter();
+  counter();
 }

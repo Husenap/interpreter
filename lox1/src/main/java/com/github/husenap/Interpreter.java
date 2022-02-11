@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.husenap.Expr.*;
-import com.github.husenap.Stmt.*;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();
@@ -24,7 +23,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
             @Override
             public String toString() {
-                return "<native fn> clock()";
+                return "<native fn clock>";
             }
         });
     }
@@ -150,13 +149,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Void visit(Expression stmt) {
+    public Void visit(Stmt.Expression stmt) {
         evaluate(stmt.expr());
         return null;
     }
 
     @Override
-    public Void visit(Print stmt) {
+    public Void visit(Stmt.Print stmt) {
         Object value = evaluate(stmt.expr());
         System.out.println(stringify(value));
         return null;
@@ -176,7 +175,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Void visit(Var stmt) {
+    public Void visit(Stmt.Var stmt) {
         Object value = null;
         if (stmt.initializer() != null) {
             value = evaluate(stmt.initializer());
@@ -199,7 +198,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Void visit(Block stmt) {
+    public Void visit(Stmt.Block stmt) {
         executeBlock(stmt.statements(), new Environment(environment));
         return null;
     }
@@ -218,7 +217,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Void visit(If stmt) {
+    public Void visit(Stmt.If stmt) {
         if (isTruthy(evaluate(stmt.condition()))) {
             execute(stmt.thenBranch());
         } else if (stmt.elseBranch() != null) {
@@ -242,7 +241,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Void visit(While stmt) {
+    public Void visit(Stmt.While stmt) {
         while (isTruthy(evaluate(stmt.condition()))) {
             execute(stmt.body());
         }
@@ -271,5 +270,20 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
 
         return function.call(this, arguments);
+    }
+
+    @Override
+    public Void visit(Stmt.Function stmt) {
+        LoxFunction function = new LoxFunction(stmt, environment);
+        environment.define(stmt.name().lexeme, function);
+        return null;
+    }
+
+    @Override
+    public Void visit(Stmt.Return stmt) {
+        Object value = null;
+        if (stmt.value() != null)
+            value = evaluate(stmt.value());
+        throw new Return(value);
     }
 }

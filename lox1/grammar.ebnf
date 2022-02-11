@@ -1,24 +1,31 @@
 program     = statement* EOF ;
 
-declaration = varDecl | statement;
-
+(* Declarations *)
+declaration = funDecl | varDecl | statement;
 varDecl     = "var" IDENTIFIER ( "=" expression )? ";" ;
+funDecl     = "fun" function ;
+function    = IDENTIFIER "(" parameters? ")" block ;
+parameters  = IDENTIFIER ( "," IDENTIFIER )* ;
 
+(* Statements *)
 statement   = exprStmt
             | forStmt
             | ifStmt
             | printStmt
+            | returnStmt
             | whileStmt
             | block ;
 exprStmt    = expression ";" ;
 ifStmt      = "if" "(" expression ")" statement ( "else" statement )? ;
 printStmt   = "print" expression ";" ;
+returnStmt  = "return" expression? ";" ;
 whileStmt   = "while" "(" expression ")" statement ;
 forStmt     = "for" "(" ( varDecl | exprStmt | ";" )
               expression? ";"
               expression? ")" statement ;
 block       = "{" declaration* "}";
 
+(* Expressions *)
 expression  = assignment ;
 assignment  = IDENTIFIER "=" assignment
             | logicOr ;
