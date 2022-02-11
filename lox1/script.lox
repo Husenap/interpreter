@@ -49,6 +49,12 @@ print "=============================";
     print "a was truthy";
   else
     print "a was falsey";
+  var b;
+  if(b){
+    print "b was truthy";
+  } else {
+    print "b was falsey";
+  }
 }
 
 print "=============================";
@@ -57,4 +63,25 @@ print "=============================";
   var b = a or 42;
   print "default value of b is: ";
   print b;
+}
+
+print "=============================";
+{
+  var T = 5;
+  while(T > 0){
+    print T;
+    T = T - 1;
+  }
+  for(var T = 5; T > 0; T = T - 1) print T;
+}
+
+print "=============================";
+{
+  var a = 0;
+  var temp;
+  for (var b = 1; a < 100; b = temp + b) {
+    print a;
+    temp = a;
+    a = b;
+  }
 }

@@ -219,4 +219,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
         return evaluate(expr.right());
     }
+
+    @Override
+    public Void visit(While stmt) {
+        while (isTruthy(evaluate(stmt.condition()))) {
+            execute(stmt.body());
+        }
+        return null;
+    }
 }

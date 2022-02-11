@@ -13,6 +13,8 @@ interface Stmt {
         R visit(Block stmt);
 
         R visit(If stmt);
+
+        R visit(While stmt);
     }
 
     abstract <R> R accept(Visitor<R> v);
@@ -45,6 +47,12 @@ interface Stmt {
         }
     }
     record If(Expr condition, Stmt thenBranch, Stmt elseBranch) implements Stmt {
+        @Override
+        public <R> R accept(Visitor<R> v) {
+            return v.visit(this);
+        }
+    }
+    record While(Expr condition, Stmt body) implements Stmt {
         @Override
         public <R> R accept(Visitor<R> v) {
             return v.visit(this);
