@@ -11,6 +11,8 @@ interface Stmt {
         R visit(Var stmt);
 
         R visit(Block stmt);
+
+        R visit(If stmt);
     }
 
     abstract <R> R accept(Visitor<R> v);
@@ -36,6 +38,13 @@ interface Stmt {
         }
     }
     record Block(List<Stmt> statements) implements Stmt {
+
+        @Override
+        public <R> R accept(Visitor<R> v) {
+            return v.visit(this);
+        }
+    }
+    record If(Expr condition, Stmt thenBranch, Stmt elseBranch) implements Stmt {
         @Override
         public <R> R accept(Visitor<R> v) {
             return v.visit(this);

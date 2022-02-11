@@ -8,6 +8,8 @@ interface Expr {
 
     R visit(Unary expr);
 
+    R visit(Logical expr);
+
     R visit(Literal expr);
 
     R visit(Grouping expr);
@@ -31,6 +33,12 @@ interface Expr {
   }
 
   record Unary(Token operator, Expr right) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
+  }
+  record Logical(Expr left, Token operator, Expr right) implements Expr {
     @Override
     public <R> R accept(Visitor<R> v) {
       return v.visit(this);
