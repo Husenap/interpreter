@@ -1,0 +1,11 @@
+var one;
+var two;
+one = 1;
+two = 2;
+print one + two;
+
+var hello;
+var world;
+hello = "hello";
+world = "world";
+print hello + ", " + world;

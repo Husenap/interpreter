@@ -1,5 +1,6 @@
 package com.github.husenap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.*;
 
@@ -13,25 +14,74 @@ public class Parser {
         this.tokens = tokens;
     }
 
-    public Expr parse() {
+    public List<Stmt> parse() {
+        List<Stmt> statements = new ArrayList<>();
+        while (!isAtEnd()) {
+            statements.add(declaration());
+        }
+        return statements;
+    }
+
+    private Stmt declaration() {
         try {
-            return expression();
+            if (match(VAR))
+                return varDeclaration();
+            return statement();
         } catch (ParseError error) {
+            synchronize();
             return null;
         }
     }
 
-    private Expr expression() {
-        return equality();
+    private Stmt varDeclaration() {
+        Token name = consume(IDENTIFIER, "Expect variable name.");
+
+        Expr initializer = null;
+        if (match(EQUAL)) {
+            initializer = expression();
+        }
+
+        consume(SEMICOLON, "Expect ';' after variable declaration.");
+        return new Stmt.Var(name, initializer);
     }
 
-    private Expr ParseBinaryOperand(Supplier<Expr> operand, TokenType... types) {
-        Expr expr = operand.get();
-        while (match(types)) {
-            Token operator = previous();
-            Expr right = operand.get();
-            expr = new Binary(expr, operator, right);
+    private Stmt statement() {
+        if (match(PRINT))
+            return printStatement();
+        return expressionStatement();
+    }
+
+    private Stmt printStatement() {
+        Expr value = expression();
+        consume(SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Print(value);
+    }
+
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        consume(SEMICOLON, "Expect ';' after expression.");
+        return new Stmt.Expression(expr);
+    }
+
+    private Expr expression() {
+        return assignment();
+    }
+
+    private Expr assignment() {
+        Expr expr = equality();
+
+        if (match(EQUAL)) {
+            Token equals = previous();
+            Expr value = assignment();
+
+            if (expr instanceof Expr.Variable) {
+                Token name = ((Expr.Variable) expr).name();
+                return new Expr.Assign(name, value);
+            }
+
+            error(equals, "Invalid assignment target.");
         }
+
         return expr;
     }
 
@@ -55,26 +105,29 @@ public class Parser {
         if (match(BANG, MINUS)) {
             Token operator = previous();
             Expr right = unary();
-            return new Unary(operator, right);
+            return new Expr.Unary(operator, right);
         }
         return primary();
     }
 
     private Expr primary() {
         if (match(FALSE))
-            return new Literal(false);
+            return new Expr.Literal(false);
         if (match(TRUE))
-            return new Literal(true);
+            return new Expr.Literal(true);
         if (match(NIL))
-            return new Literal(null);
+            return new Expr.Literal(null);
 
         if (match(NUMBER, STRING))
-            return new Literal(previous().literal);
+            return new Expr.Literal(previous().literal);
+
+        if (match(IDENTIFIER))
+            return new Expr.Variable(previous());
 
         if (match(LEFT_PAREN)) {
             Expr expr = expression();
             consume(RIGHT_PAREN, "Expect ')': after expression.");
-            return new Grouping(expr);
+            return new Expr.Grouping(expr);
         }
 
         throw error(peek(), "Expect expression.");
@@ -148,5 +201,15 @@ public class Parser {
             }
             advance();
         }
+    }
+
+    private Expr ParseBinaryOperand(Supplier<Expr> operand, TokenType... types) {
+        Expr expr = operand.get();
+        while (match(types)) {
+            Token operator = previous();
+            Expr right = operand.get();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+        return expr;
     }
 }

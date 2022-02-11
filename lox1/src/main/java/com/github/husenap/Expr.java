@@ -1,43 +1,60 @@
 package com.github.husenap;
 
 interface Expr {
-  interface Visitor<E> {
-    E visit(Binary expr);
+  interface Visitor<R> {
+    R visit(Assign expr);
 
-    E visit(Unary expr);
+    R visit(Binary expr);
 
-    E visit(Literal expr);
+    R visit(Unary expr);
 
-    E visit(Grouping expr);
+    R visit(Literal expr);
+
+    R visit(Grouping expr);
+
+    R visit(Variable expr);
   }
 
-  <E> E accept(Visitor<E> v);
-}
+  <R> R accept(Visitor<R> v);
 
-record Binary(Expr left, Token operator, Expr right) implements Expr {
-  @Override
-  public <E> E accept(Visitor<E> v) {
-    return v.visit(this);
+  record Assign(Token name, Expr value) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
   }
-}
-
-record Unary(Token operator, Expr right) implements Expr {
-  @Override
-  public <E> E accept(Visitor<E> v) {
-    return v.visit(this);
+  record Binary(Expr left, Token operator, Expr right) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
   }
-}
 
-record Literal(Object value) implements Expr {
-  @Override
-  public <E> E accept(Visitor<E> v) {
-    return v.visit(this);
+  record Unary(Token operator, Expr right) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
   }
-}
 
-record Grouping(Expr expr) implements Expr {
-  @Override
-  public <E> E accept(Visitor<E> v) {
-    return v.visit(this);
+  record Literal(Object value) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
+  }
+
+  record Grouping(Expr expr) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
+  }
+
+  record Variable(Token name) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
   }
 }

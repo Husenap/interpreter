@@ -1,8 +1,12 @@
 package com.github.husenap;
 
-import com.github.husenap.Expr.Visitor;
+import java.util.List;
 
-public class Interpreter implements Visitor<Object> {
+import com.github.husenap.Expr.*;
+import com.github.husenap.Stmt.*;
+
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+    private Environment environment = new Environment();
 
     Object interpret(Expr expr) {
         Object result = null;
@@ -12,6 +16,20 @@ public class Interpreter implements Visitor<Object> {
             Lox.runtimeError(error);
         }
         return result;
+    }
+
+    void interpret(List<Stmt> statements) {
+        try {
+            for (Stmt stmt : statements) {
+                execute(stmt);
+            }
+        } catch (RuntimeError error) {
+            Lox.runtimeError(error);
+        }
+    }
+
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
     }
 
     @Override
@@ -110,4 +128,52 @@ public class Interpreter implements Visitor<Object> {
         }
     }
 
+    @Override
+    public Void visit(Expression stmt) {
+        evaluate(stmt.expr());
+        return null;
+    }
+
+    @Override
+    public Void visit(Print stmt) {
+        Object value = evaluate(stmt.expr());
+        System.out.println(stringify(value));
+        return null;
+    }
+
+    private String stringify(Object value) {
+        if (value == null)
+            return "nil";
+
+        String text = value.toString();
+
+        if (value instanceof Double && text.endsWith(".0")) {
+            text = text.substring(0, text.length() - 2);
+        }
+
+        return text;
+    }
+
+    @Override
+    public Void visit(Var stmt) {
+        Object value = null;
+        if (stmt.initializer() != null) {
+            value = evaluate(stmt.initializer());
+        }
+
+        environment.define(stmt.name().lexeme, value);
+        return null;
+    }
+
+    @Override
+    public Object visit(Variable expr) {
+        return environment.get(expr.name());
+    }
+
+    @Override
+    public Object visit(Assign expr) {
+        Object value = evaluate(expr.value());
+        environment.assign(expr.name(), value);
+        return value;
+    }
 }
