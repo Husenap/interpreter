@@ -1,0 +1,159 @@
+{
+  var one;
+  var two;
+  one = 1;
+  two = 2;
+  println(one + two);
+}
+
+{
+  var hello;
+  var world;
+  hello = "hello";
+  world = "world";
+  println(hello + ", " + world);
+}
+
+println("=============================");
+var a = "global a";
+var b = "global b";
+var c = "global c";
+{
+  var a = "outer a";
+  var b = "outer b";
+  {
+    var a = "inner a";
+    println(a);
+    println(b);
+    println(c);
+  }
+  println(a);
+  println(b);
+  println(c);
+}
+println(a);
+println(b);
+println(c);
+
+println("=============================");
+var a = 1;
+{
+  var a = a + 2;
+  println(a);
+}
+
+println("=============================");
+{
+  var a = "hej";
+  if(a)
+    println("a was truthy");
+  else
+    println("a was falsey");
+  var b;
+  if(b){
+    println("b was truthy");
+  } else {
+    println("b was falsey");
+  }
+}
+
+println("=============================");
+{
+  var a;
+  var b = a or 42;
+  print("default value of b is: ");
+  println(b);
+}
+
+println("=============================");
+{
+  var T = 5;
+  while(T > 0){
+    println(T);
+    T = T - 1;
+  }
+  for(var T = 5; T > 0; T = T - 1) println(T);
+}
+
+println("=============================");
+{
+  var a = 0;
+  var temp;
+  for (var b = 1; a < 100; b = temp + b) {
+    println(a);
+    temp = a;
+    a = b;
+  }
+}
+
+println("=============================");
+{
+  var t0 = clock();
+  for(var i = 0; i < 10000; i = i + 1) {}
+  var t1 = clock();
+  print("Elapsed time: ");
+  println(t1 - t0);
+}
+
+println("=============================");
+{
+  fun caller(fn){
+    fn();
+  }
+
+  fun callMe(){
+    println("Yaaaay");
+  }
+
+  caller(callMe);
+}
+println("=========fibonacci===========");
+{
+  fun fib(n){
+    if(n <= 1) return n;
+    return fib(n-2)+fib(n-1);
+  }
+  for(var i = 0; i < 10; i = i + 1) println(fib(i));
+}
+println("=========factorial===========");
+{
+  fun factorial(n){
+    if(n <= 1) return 1;
+    return n * factorial(n-1);
+  }
+  for(var i = 0; i < 10; i = i + 1) println(factorial(i));
+}
+println("=========counter=============");
+{
+  fun makeCounter(){
+    var i = 0;
+    fun count(){
+      i = i + 1;
+      println(i);
+    }
+    return count;
+  }
+
+  var counter = makeCounter();
+  counter();
+  counter();
+}
+
+println("=============================");
+{
+  fun hejsan(name){
+    println("hejsan " + tostring(name));
+  }
+  println(tostring);
+  var a = 42;
+  println("a = " + tostring(a));
+  println(hejsan);
+  hejsan(hejsan);
+}
+
+println("=============================");
+{
+  print("write something > ");
+  var input_text = read();
+  println("input_text = " + input_text);
+}

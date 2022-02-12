@@ -28,13 +28,13 @@ public class Scanner {
     keywords.put("if", IF);
     keywords.put("nil", NIL);
     keywords.put("or", OR);
-    keywords.put("print", PRINT);
     keywords.put("return", RETURN);
     keywords.put("super", SUPER);
     keywords.put("this", THIS);
     keywords.put("true", TRUE);
     keywords.put("var", VAR);
     keywords.put("while", WHILE);
+
   }
 
   public Scanner(String source) {
@@ -58,76 +58,76 @@ public class Scanner {
   private void scanToken() {
     char c = advance();
     switch (c) {
-      case '(':
-        addToken(LEFT_PAREN);
-        break;
-      case ')':
-        addToken(RIGHT_PAREN);
-        break;
-      case '{':
-        addToken(LEFT_BRACE);
-        break;
-      case '}':
-        addToken(RIGHT_BRACE);
-        break;
-      case ',':
-        addToken(COMMA);
-        break;
-      case '.':
-        addToken(DOT);
-        break;
-      case '-':
-        addToken(MINUS);
-        break;
-      case '+':
-        addToken(PLUS);
-        break;
-      case ';':
-        addToken(SEMICOLON);
-        break;
-      case '*':
-        addToken(STAR);
-        break;
-      case '!':
-        addToken(match('=') ? BANG_EQUAL : BANG);
-        break;
-      case '=':
-        addToken(match('=') ? EQUAL_EQUAL : EQUAL);
-        break;
-      case '<':
-        addToken(match('=') ? LESS_EQUAL : LESS);
-        break;
-      case '>':
-        addToken(match('=') ? GREATER_EQUAL : GREATER);
-        break;
-      case '/':
-        if (match('/')) {
-          while (peek() != '\n' && !isAtEnd())
-            advance();
-        } else {
-          addToken(SLASH);
-        }
-        break;
-      case ' ':
-      case '\r':
-      case '\t':
-        // Ignore whitespace.
-        break;
-      case '\n':
-        ++line;
-        break;
-      case '"':
-        string();
-        break;
-      default:
-        if (isDigit(c)) {
-          number();
-        } else if (isAlpha(c)) {
-          identifier();
-        } else {
-          Lox.error(line, "Unexpected character.");
-        }
-        break;
+    case '(':
+      addToken(LEFT_PAREN);
+      break;
+    case ')':
+      addToken(RIGHT_PAREN);
+      break;
+    case '{':
+      addToken(LEFT_BRACE);
+      break;
+    case '}':
+      addToken(RIGHT_BRACE);
+      break;
+    case ',':
+      addToken(COMMA);
+      break;
+    case '.':
+      addToken(DOT);
+      break;
+    case '-':
+      addToken(MINUS);
+      break;
+    case '+':
+      addToken(PLUS);
+      break;
+    case ';':
+      addToken(SEMICOLON);
+      break;
+    case '*':
+      addToken(STAR);
+      break;
+    case '!':
+      addToken(match('=') ? BANG_EQUAL : BANG);
+      break;
+    case '=':
+      addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+      break;
+    case '<':
+      addToken(match('=') ? LESS_EQUAL : LESS);
+      break;
+    case '>':
+      addToken(match('=') ? GREATER_EQUAL : GREATER);
+      break;
+    case '/':
+      if (match('/')) {
+        while (peek() != '\n' && !isAtEnd())
+          advance();
+      } else {
+        addToken(SLASH);
+      }
+      break;
+    case ' ':
+    case '\r':
+    case '\t':
+      // Ignore whitespace.
+      break;
+    case '\n':
+      ++line;
+      break;
+    case '"':
+      string();
+      break;
+    default:
+      if (isDigit(c)) {
+        number();
+      } else if (isAlpha(c)) {
+        identifier();
+      } else {
+        Lox.error(line, "Unexpected character.");
+      }
+      break;
     }
   }
 
