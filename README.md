@@ -1,2 +1,2 @@
 # interpreter
-Following the Crafting Interpreters book
+Following the great [Crafting Interpreters](https://craftinginterpreters.com/) book
