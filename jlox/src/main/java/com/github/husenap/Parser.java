@@ -220,19 +220,19 @@ public class Parser {
     }
 
     private Expr equality() {
-        return ParseBinaryOperand(this::comparison, BANG_EQUAL, EQUAL_EQUAL);
+        return ParseBinaryOperator(this::comparison, BANG_EQUAL, EQUAL_EQUAL);
     }
 
     private Expr comparison() {
-        return ParseBinaryOperand(this::term, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL);
+        return ParseBinaryOperator(this::term, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL);
     }
 
     private Expr term() {
-        return ParseBinaryOperand(this::factor, MINUS, PLUS);
+        return ParseBinaryOperator(this::factor, MINUS, PLUS);
     }
 
     private Expr factor() {
-        return ParseBinaryOperand(this::unary, SLASH, STAR);
+        return ParseBinaryOperator(this::unary, SLASH, STAR);
     }
 
     private Expr unary() {
@@ -358,7 +358,7 @@ public class Parser {
         }
     }
 
-    private Expr ParseBinaryOperand(Supplier<Expr> operand, TokenType... types) {
+    private Expr ParseBinaryOperator(Supplier<Expr> operand, TokenType... types) {
         Expr expr = operand.get();
         while (match(types)) {
             Token operator = previous();

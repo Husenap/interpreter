@@ -1,13 +1,16 @@
 package com.github.husenap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.github.husenap.Expr.*;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();
     private Environment environment = globals;
+    private final Map<Expr, Integer> locals = new HashMap<>();
 
     public Interpreter() {
         globals.define("clock", new LoxCallable() {
@@ -91,6 +94,31 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             @Override
             public String toString() {
                 return "<native fn print>";
+            }
+        });
+        globals.define("array_list_create", new LoxCallable() {
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                return new ArrayList<Object>();
+            }
+
+            @Override
+            public int arity() {
+                return 0;
+            }
+        });
+        globals.define("array_list_add", new LoxCallable() {
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                if (arguments.get(0) instanceof ArrayList) {
+                    ((ArrayList) arguments.get(0)).add(arguments.get(1));
+                }
+                return null;
+            }
+
+            @Override
+            public int arity() {
+                return 2;
             }
         });
     }
@@ -222,26 +250,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Void visit(Stmt.Print stmt) {
-        Object value = evaluate(stmt.expr());
-        System.out.println(stringify(value));
-        return null;
-    }
-
-    private String stringify(Object value) {
-        if (value == null)
-            return "nil";
-
-        String text = value.toString();
-
-        if (value instanceof Double && text.endsWith(".0")) {
-            text = text.substring(0, text.length() - 2);
-        }
-
-        return text;
-    }
-
-    @Override
     public Void visit(Stmt.Var stmt) {
         Object value = null;
         if (stmt.initializer() != null) {
@@ -254,13 +262,28 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visit(Variable expr) {
-        return environment.get(expr.name());
+        return lookUpVariable(expr.name(), expr);
+    }
+
+    private Object lookUpVariable(Token name, Expr expr) {
+        Integer distance = locals.get(expr);
+        if (distance != null) {
+            return environment.getAt(distance, name.lexeme);
+        } else {
+            return globals.get(name);
+        }
     }
 
     @Override
     public Object visit(Assign expr) {
         Object value = evaluate(expr.value());
-        environment.assign(expr.name(), value);
+
+        Integer distance = locals.get(expr);
+        if (distance != null) {
+            environment.assignAt(distance, expr.name(), value);
+        } else {
+            globals.assign(expr.name(), value);
+        }
         return value;
     }
 
@@ -352,5 +375,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         if (stmt.value() != null)
             value = evaluate(stmt.value());
         throw new Return(value);
+    }
+
+    public void resolve(Expr expr, int depth) {
+        locals.put(expr, depth);
     }
 }

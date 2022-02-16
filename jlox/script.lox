@@ -35,12 +35,6 @@ println(a);
 println(b);
 println(c);
 
-println("=============================");
-var a = 1;
-{
-  var a = a + 2;
-  println(a);
-}
 
 println("=============================");
 {
@@ -153,7 +147,24 @@ println("=============================");
 
 println("=============================");
 {
-  print("write something > ");
-  var input_text = read();
-  println("input_text = " + input_text);
+  var list = array_list_create();
+  array_list_add(list, "Hello");
+  array_list_add(list, 42);
+  array_list_add(list, println);
+  println(list);
+  list = nil;
+}
+
+println("==========scopes=============");
+{
+  var a = "outer";
+  {
+    fun showA(){
+      println(a);
+    }
+
+    showA();
+    var a = "inner";
+    showA();
+  }
 }

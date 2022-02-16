@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static com.github.husenap.TokenType.*;
 
-public class Scanner {
+public class Lexer {
   private final String source;
   private final List<Token> tokens = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class Scanner {
 
   }
 
-  public Scanner(String source) {
+  public Lexer(String source) {
     this.source = source;
   }
 
