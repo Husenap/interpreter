@@ -168,3 +168,18 @@ println("==========scopes=============");
     showA();
   }
 }
+
+println("==========classes============");
+{
+  class Person{
+    init(name){
+      this.name = name;
+    }
+    greet(other){
+      println("Hi " + other.name + ", my name is " + this.name + "!");
+    }
+  }
+  var dubu = Person("Dubu");
+  var mina = Person("Mina");
+  dubu.greet(mina);
+}

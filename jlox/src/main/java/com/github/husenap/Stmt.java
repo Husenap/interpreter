@@ -17,6 +17,8 @@ interface Stmt {
         R visit(Function stmt);
 
         R visit(Return stmt);
+
+        R visit(Class stmt);
     }
 
     abstract <R> R accept(Visitor<R> v);
@@ -60,6 +62,13 @@ interface Stmt {
         }
     }
     record Return(Token keyword, Expr value) implements Stmt {
+        @Override
+        public <R> R accept(Visitor<R> v) {
+            return v.visit(this);
+        }
+    }
+
+    public record Class(Token name, List<Stmt.Function> methods) implements Stmt {
         @Override
         public <R> R accept(Visitor<R> v) {
             return v.visit(this);

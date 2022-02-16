@@ -19,6 +19,12 @@ interface Expr {
     R visit(Variable expr);
 
     R visit(Call expr);
+
+    R visit(Get expr);
+
+    R visit(Set expr);
+
+    R visit(This expr);
   }
 
   <R> R accept(Visitor<R> v);
@@ -70,6 +76,26 @@ interface Expr {
     }
   }
   record Call(Expr callee, Token paren, List<Expr> arguments) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
+  }
+
+  record Get(Expr object, Token name) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
+  }
+
+  record Set(Expr object, Token name, Expr value) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
+  }
+  record This(Token keyword) implements Expr {
     @Override
     public <R> R accept(Visitor<R> v) {
       return v.visit(this);

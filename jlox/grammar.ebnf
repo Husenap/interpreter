@@ -1,7 +1,8 @@
 program     = statement* EOF ;
 
 (* Declarations *)
-declaration = funDecl | varDecl | statement;
+declaration = classDecl | funDecl | varDecl | statement;
+classDecl   = "class" IDENTIFIER "{" function* "}" ;
 varDecl     = "var" IDENTIFIER ( "=" expression )? ";" ;
 funDecl     = "fun" function ;
 function    = IDENTIFIER "(" parameters? ")" block ;
@@ -27,7 +28,7 @@ block       = "{" declaration* "}";
 
 (* Expressions *)
 expression  = assignment ;
-assignment  = IDENTIFIER "=" assignment
+assignment  = ( call "." )? IDENTIFIER "=" assignment
             | logicOr ;
 logicOr     = logicAnd ( "or" logicAnd )* ;
 logicAnd    = equality ( "and" equality )* ;
@@ -37,9 +38,9 @@ term        = factor ( ( "-" | "+" ) factor )* ;
 factor      = unary ( ( "/" | "*" ) unary )* ;
 unary       = ( "!" | "-" ) unary
             | call ;
-call        = primary ( "(" arguments? ")" )* ;
+call        = primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
 arguments   = expression ( "," expression )* ;
 primary     = NUMBER | STRING
-            | "true" | "false" | "nil"
+            | "true" | "false" | "nil" | "this"
             | "(" expression ")"
             | IDENTIFIER ;
