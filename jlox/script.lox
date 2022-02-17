@@ -183,3 +183,40 @@ println("==========classes============");
   var mina = Person("Mina");
   dubu.greet(mina);
 }
+
+println("=========inheritance=========");
+{
+  class Shape {
+    init(density){
+      this.density = density;
+    }
+    mass(){
+      return this.area() * this.density;
+    }
+  }
+  class Rectangle < Shape {
+    init(width, height, density){
+      super.init(density);
+      this.width = width;
+      this.height = height;
+    }
+    area(){
+      return this.width * this.height;
+    }
+  }
+  class Circle < Shape {
+    init(radius, density){
+      super.init(density);
+      this.radius = radius;
+    }
+    area(){
+      return this.radius * this.radius * 3.1415926535898;
+    }
+  }
+
+  var rect = Rectangle(4.0, 4.0, 1.0);
+  var circle = Circle(2.0, 2.0);
+
+  println("Mass of rect is   : " + tostring(rect.mass()));
+  println("Mass of circle is : " + tostring(circle.mass()));
+}

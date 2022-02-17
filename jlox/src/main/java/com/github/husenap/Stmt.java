@@ -68,7 +68,7 @@ interface Stmt {
         }
     }
 
-    public record Class(Token name, List<Stmt.Function> methods) implements Stmt {
+    public record Class(Token name, Expr.Variable superclass, List<Stmt.Function> methods) implements Stmt {
         @Override
         public <R> R accept(Visitor<R> v) {
             return v.visit(this);

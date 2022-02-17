@@ -25,6 +25,8 @@ interface Expr {
     R visit(Set expr);
 
     R visit(This expr);
+
+    R visit(Super expr);
   }
 
   <R> R accept(Visitor<R> v);
@@ -96,6 +98,12 @@ interface Expr {
     }
   }
   record This(Token keyword) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
+  }
+  record Super(Token keyword, Token method) implements Expr {
     @Override
     public <R> R accept(Visitor<R> v) {
       return v.visit(this);
