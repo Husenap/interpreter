@@ -1,0 +1,51 @@
+class Node{
+  init(element){
+    this.element = element;
+    this.next = nil;
+  } 
+}
+class LinkedList {
+  init(){
+    this.head = nil;
+  }
+  addFirst(element){
+    var node = Node(element);
+    node.next = this.head;
+    this.head = node;
+  }
+  popFirst(){
+    if(this.head == nil)return nil;
+    var result = this.head.element;
+    this.head = this.head.next;
+    return result;
+  }
+  find(element){
+    var current = this.head;
+    while(current != nil){
+      if(current.element == element){
+        return current;
+      }
+      current = current.next;
+    }
+    return nil;
+  }
+  print(){
+    var current = this.head;
+    while(current != nil){
+      print("[" + tostring(current.element) + "] - ");
+      current = current.next;
+    }
+    println("");
+  }
+}
+
+var ll = LinkedList();
+for(var i = 0; i < 10; i = i + 1){
+  ll.addFirst(i);
+}
+println(ll.find(5).element);
+println(ll.find(42));
+ll.print();
+for(var i = 0; i < 11; i = i + 1){
+  println(ll.popFirst());
+}

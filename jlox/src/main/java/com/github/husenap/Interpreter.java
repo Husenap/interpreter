@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.husenap.Expr.*;
+import com.github.husenap.natives.NativeArrayList;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();
@@ -96,31 +97,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return "<native fn print>";
             }
         });
-        globals.define("array_list_create", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                return new ArrayList<Object>();
-            }
-
-            @Override
-            public int arity() {
-                return 0;
-            }
-        });
-        globals.define("array_list_add", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                if (arguments.get(0) instanceof ArrayList) {
-                    ((ArrayList) arguments.get(0)).add(arguments.get(1));
-                }
-                return null;
-            }
-
-            @Override
-            public int arity() {
-                return 2;
-            }
-        });
+        NativeArrayList.define(globals);
     }
 
     Object interpret(Expr expr) {

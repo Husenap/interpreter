@@ -1,0 +1,31 @@
+class ArrayList{
+  init(){
+    this.handle = __array_list_create();
+  }
+  add(element){
+    __array_list_add(this.handle, element);
+  }
+  get(index){
+    return __array_list_get(this.handle, index);
+  }
+  contains(element){
+    return __array_list_contains(this.handle, element);
+  }
+  size(){
+    return __array_list_size(this.handle);
+  }
+  isEmpty(){
+    return __array_list_is_empty(this.handle);
+  }
+}
+
+var al = ArrayList();
+for(var i = 0; i < 10; i = i + 1){
+  al.add(i);
+}
+
+println("Size is " + tostring(al.size()));
+println("Empty: " + tostring(al.isEmpty()));
+println("Contains 5: " + tostring(al.contains(5)));
+println("Contains 42: " + tostring(al.contains(42)));
+println(al.get(5));

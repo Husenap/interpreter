@@ -145,16 +145,6 @@ println("=============================");
   hejsan(hejsan);
 }
 
-println("=============================");
-{
-  var list = array_list_create();
-  array_list_add(list, "Hello");
-  array_list_add(list, 42);
-  array_list_add(list, println);
-  println(list);
-  list = nil;
-}
-
 println("==========scopes=============");
 {
   var a = "outer";
@@ -220,3 +210,4 @@ println("=========inheritance=========");
   println("Mass of rect is   : " + tostring(rect.mass()));
   println("Mass of circle is : " + tostring(circle.mass()));
 }
+
