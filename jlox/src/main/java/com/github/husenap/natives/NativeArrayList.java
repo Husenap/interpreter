@@ -1,94 +1,45 @@
 package com.github.husenap.natives;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.github.husenap.Environment;
-import com.github.husenap.Interpreter;
-import com.github.husenap.LoxCallable;
 
-public class NativeArrayList {
-    public static void define(Environment environment) {
-        environment.define("__array_list_create", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                return new ArrayList<Object>();
-            }
+public class NativeArrayList extends Natives {
+    public NativeArrayList(Environment environment) {
+        super(environment);
 
-            @Override
-            public int arity() {
-                return 0;
-            }
+        define("__array_list_create", 0, (i, args) -> {
+            return new ArrayList<Object>();
         });
-        environment.define("__array_list_add", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                if (arguments.get(0) instanceof ArrayList) {
-                    ((ArrayList<Object>) arguments.get(0)).add(arguments.get(1));
-                }
-                return null;
+        define("__array_list_add", 2, (i, args) -> {
+            if (args.get(0) instanceof ArrayList) {
+                ((ArrayList<Object>) args.get(0)).add(args.get(1));
             }
-
-            @Override
-            public int arity() {
-                return 2;
-            }
+            return null;
         });
-        environment.define("__array_list_get", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                if (arguments.get(0) instanceof ArrayList) {
-                    return ((ArrayList<Object>) arguments.get(0)).get(((Double) arguments.get(1)).intValue());
-                }
-                return null;
+        define("__array_list_get", 2, (i, args) -> {
+            if (args.get(0) instanceof ArrayList) {
+                return ((ArrayList<Object>) args.get(0)).get(((Double) args.get(1)).intValue());
             }
-
-            @Override
-            public int arity() {
-                return 2;
-            }
+            return null;
         });
-        environment.define("__array_list_contains", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                if (arguments.get(0) instanceof ArrayList) {
-                    return ((ArrayList<Object>) arguments.get(0)).contains(arguments.get(1));
-                }
-                return null;
+        define("__array_list_contains", 2, (i, args) -> {
+            if (args.get(0) instanceof ArrayList) {
+                return ((ArrayList<Object>) args.get(0)).contains(args.get(1));
             }
-
-            @Override
-            public int arity() {
-                return 2;
-            }
+            return null;
         });
-        environment.define("__array_list_size", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                if (arguments.get(0) instanceof ArrayList) {
-                    return ((ArrayList<Object>) arguments.get(0)).size();
-                }
-                return null;
+        define("__array_list_size", 1, (i, args) -> {
+            if (args.get(0) instanceof ArrayList) {
+                return ((ArrayList<Object>) args.get(0)).size();
             }
-
-            @Override
-            public int arity() {
-                return 1;
-            }
+            return null;
         });
-        environment.define("__array_list_is_empty", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                if (arguments.get(0) instanceof ArrayList) {
-                    return ((ArrayList<Object>) arguments.get(0)).isEmpty();
-                }
-                return null;
+        define("__array_list_is_empty", 1, (i, args) -> {
+            if (args.get(0) instanceof ArrayList) {
+                return ((ArrayList<Object>) args.get(0)).isEmpty();
             }
-
-            @Override
-            public int arity() {
-                return 1;
-            }
+            return null;
         });
     }
 }

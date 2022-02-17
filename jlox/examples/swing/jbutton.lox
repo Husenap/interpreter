@@ -1,0 +1,11 @@
+#include "jcomponent.lox"
+
+class JButton < Component {
+  init(name){
+    super.init();
+    this.handle = __swing_jbutton_create(name);
+  }
+  onClick(callback){
+    __swing_jbutton_add_action_listener(this.handle, callback);
+  }
+}

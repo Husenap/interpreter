@@ -3,9 +3,6 @@ package com.github.husenap;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class Lox {
@@ -24,8 +21,8 @@ public class Lox {
   }
 
   private static void runFile(String path) throws IOException {
-    byte[] bytes = Files.readAllBytes(Paths.get(path));
-    run(new String(bytes, Charset.defaultCharset()));
+    String script = new ScriptReader().read(path);
+    run(script);
     if (hadError)
       System.exit(65);
     if (hadRuntimeError)

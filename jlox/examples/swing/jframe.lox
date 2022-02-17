@@ -1,0 +1,14 @@
+#include "jcomponent.lox"
+
+class JFrame < Component{
+  init(title){
+    super.init();
+    this.handle = __swing_jframe_create(title);
+  }
+  show(){
+    __swing_jframe_show(this.handle);
+  }
+  add(control){
+    __swing_jframe_add(this.handle, control.handle);
+  }
+}

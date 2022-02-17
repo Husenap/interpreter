@@ -1,0 +1,13 @@
+#include "swing/jframe.lox"
+#include "swing/jbutton.lox"
+
+var frame = JFrame("Lox");
+
+var button = JButton("Click Me!");
+fun clickHandler(){
+  println("I was clicked!!");
+}
+button.onClick(clickHandler);
+
+frame.add(button);
+frame.show();

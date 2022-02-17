@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.github.husenap.Expr.*;
 import com.github.husenap.natives.NativeArrayList;
+import com.github.husenap.natives.NativeSwing;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();
@@ -97,7 +98,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return "<native fn print>";
             }
         });
-        NativeArrayList.define(globals);
+        new NativeArrayList(globals);
+        new NativeSwing(globals);
     }
 
     Object interpret(Expr expr) {

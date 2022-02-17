@@ -1,0 +1,8 @@
+class Person{
+  init(name){
+    this.name = name;
+  }
+  greet(){
+    println("Hi, my name is " + this.name);
+  }
+}

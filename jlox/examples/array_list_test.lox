@@ -1,0 +1,17 @@
+#include "array_list.lox"
+#include "person.lox"
+
+var al = ArrayList();
+for(var i = 0; i < 10; i = i + 1){
+  al.add(Person("Dubu"));
+}
+
+println("Size is " + tostring(al.size()));
+println("Empty: " + tostring(al.isEmpty()));
+println("Contains 5: " + tostring(al.contains(5)));
+println("Contains 42: " + tostring(al.contains(42)));
+println(al.get(5));
+
+for(var i = 0; i < 10; i = i + 1){
+  al.get(i).greet();
+}
