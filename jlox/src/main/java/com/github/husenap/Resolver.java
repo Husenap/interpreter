@@ -271,4 +271,16 @@ public class Resolver implements Stmt.Visitor<Void>, Expr.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visit(Expr.Lambda expr) {
+        beginScope();
+        for (Token param : expr.params()) {
+            declare(param);
+            define(param);
+        }
+        resolve(expr.body());
+        endScope();
+        return null;
+    }
+
 }

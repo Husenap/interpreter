@@ -1,14 +1,10 @@
 package com.github.husenap;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.husenap.Expr.*;
-import com.github.husenap.natives.NativeArrayList;
-import com.github.husenap.natives.NativeSwing;
-import com.github.husenap.natives.NativeSystem;
+import com.github.husenap.natives.*;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();
@@ -46,7 +42,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(Binary expr) {
+    public Object visit(Expr.Binary expr) {
         Object left = evaluate(expr.left());
         Object right = evaluate(expr.right());
 
@@ -89,7 +85,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(Unary expr) {
+    public Object visit(Expr.Unary expr) {
         Object right = evaluate(expr.right());
 
         switch (expr.operator().type) {
@@ -105,12 +101,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(Literal expr) {
+    public Object visit(Expr.Literal expr) {
         return expr.value();
     }
 
     @Override
-    public Object visit(Grouping expr) {
+    public Object visit(Expr.Grouping expr) {
         return evaluate(expr.expr());
     }
 
@@ -159,7 +155,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(Variable expr) {
+    public Object visit(Expr.Variable expr) {
         return lookUpVariable(expr.name(), expr);
     }
 
@@ -173,7 +169,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(Assign expr) {
+    public Object visit(Expr.Assign expr) {
         Object value = evaluate(expr.value());
 
         Integer distance = locals.get(expr);
@@ -215,7 +211,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(Logical expr) {
+    public Object visit(Expr.Logical expr) {
         Object left = evaluate(expr.left());
 
         if (expr.operator().type == TokenType.OR) {
@@ -237,15 +233,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(Call expr) {
+    public Object visit(Expr.Call expr) {
         Object callee = evaluate(expr.callee());
 
-        // List<Object> arguments =
-        // expr.arguments().stream().map(this::evaluate).toList();
-        List<Object> arguments = new ArrayList<>();
-        for (Expr argument : expr.arguments()) {
-            arguments.add(evaluate(argument));
-        }
+        List<Object> arguments = expr.arguments().stream().map(this::evaluate).toList();
 
         if (!(callee instanceof LoxCallable)) {
             throw new RuntimeError(expr.paren(), "Can only call functions and classes.");
@@ -313,7 +304,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(Get expr) {
+    public Object visit(Expr.Get expr) {
         Object object = evaluate(expr.object());
         if (object instanceof LoxInstance) {
             return ((LoxInstance) object).get(expr.name());
@@ -322,7 +313,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(Set expr) {
+    public Object visit(Expr.Set expr) {
         Object object = evaluate(expr.object());
 
         if (!(object instanceof LoxInstance)) {
@@ -335,12 +326,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visit(This expr) {
+    public Object visit(Expr.This expr) {
         return lookUpVariable(expr.keyword(), expr);
     }
 
     @Override
-    public Object visit(Super expr) {
+    public Object visit(Expr.Super expr) {
         int distance = locals.get(expr);
         LoxClass superclass = (LoxClass) environment.getAt(distance, "super");
         LoxInstance object = (LoxInstance) environment.getAt(distance - 1, "this");
@@ -349,5 +340,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             throw new RuntimeError(expr.method(), String.format("Undefined property '%s'.", expr.method().lexeme));
         }
         return method.bind(object);
+    }
+
+    @Override
+    public Object visit(Expr.Lambda expr) {
+        return new LoxLambda(expr, environment);
     }
 }

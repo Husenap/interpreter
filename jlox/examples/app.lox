@@ -4,10 +4,10 @@
 var frame = JFrame("Lox");
 
 var button = JButton("Click Me!");
-fun clickHandler(){
-  println("I was clicked!!");
-}
-button.onClick(clickHandler);
+
+button.onClick(fun(){
+  println("I was clicked from a lambda!");
+});
 
 frame.add(button);
 frame.show();

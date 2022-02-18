@@ -63,21 +63,26 @@ public class Parser {
         Token name = consume(IDENTIFIER, String.format("Expect %s name.", kind));
         consume(LEFT_PAREN, String.format("Expect '(' after %s name.", kind));
 
-        List<Token> parameters = new ArrayList<>();
-        if (!check(RIGHT_PAREN)) {
-            do {
-                if (parameters.size() >= 255) {
-                    error(peek(), "Can't have more than 255 parameters.");
-                }
-
-                parameters.add(consume(IDENTIFIER, "Expect parameter name."));
-            } while (match(COMMA));
-        }
-        consume(RIGHT_PAREN, "Expect ')' after parameters.");
+        List<Token> params = parameters();
 
         consume(LEFT_BRACE, String.format("Expect '{' before %s body.", kind));
         List<Stmt> body = block();
-        return new Stmt.Function(name, parameters, body);
+        return new Stmt.Function(name, params, body);
+    }
+
+    List<Token> parameters() {
+        List<Token> params = new ArrayList<>();
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (params.size() >= 255) {
+                    error(peek(), "Can't have more than 255 parameters.");
+                }
+
+                params.add(consume(IDENTIFIER, "Expect parameter name."));
+            } while (match(COMMA));
+        }
+        consume(RIGHT_PAREN, "Expect ')' after parameters.");
+        return params;
     }
 
     private Stmt varDeclaration() {
@@ -300,6 +305,14 @@ public class Parser {
         return new Expr.Call(callee, paren, arguments);
     }
 
+    private Expr lambda() {
+        consume(LEFT_PAREN, "Expect '(' after 'fun'.");
+        List<Token> params = parameters();
+        consume(LEFT_BRACE, "Expect '{' before lambda body.");
+        List<Stmt> body = block();
+        return new Expr.Lambda(params, body);
+    }
+
     private Expr primary() {
         if (match(FALSE))
             return new Expr.Literal(false);
@@ -329,6 +342,9 @@ public class Parser {
             consume(RIGHT_PAREN, "Expect ')': after expression.");
             return new Expr.Grouping(expr);
         }
+
+        if (match(FUN))
+            return lambda();
 
         throw error(peek(), "Expect expression.");
     }
