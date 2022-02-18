@@ -25,6 +25,11 @@ public abstract class Natives {
             public int arity() {
                 return arity;
             }
+
+            @Override
+            public String toString() {
+                return String.format("<native fn %s>", name);
+            }
         });
     }
 }

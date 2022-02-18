@@ -20,11 +20,12 @@ public class ScriptReader {
     }
 
     private String readFile(Path dir, Path file) {
-        if (seen.contains(file))
+        Path f = dir.resolve(file);
+        if (seen.contains(f))
             return "";
-        seen.add(file);
+        seen.add(f);
 
-        String text = fileToString(dir.resolve(file));
+        String text = fileToString(f);
 
         Pattern p = Pattern.compile("#include \"([^\"]+)\"");
         Matcher m = p.matcher(text);

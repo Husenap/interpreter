@@ -8,6 +8,7 @@ import java.util.Map;
 import com.github.husenap.Expr.*;
 import com.github.husenap.natives.NativeArrayList;
 import com.github.husenap.natives.NativeSwing;
+import com.github.husenap.natives.NativeSystem;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();
@@ -15,89 +16,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private final Map<Expr, Integer> locals = new HashMap<>();
 
     public Interpreter() {
-        globals.define("clock", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                return (double) System.currentTimeMillis() / 1000.0;
-            }
-
-            @Override
-            public int arity() {
-                return 0;
-            }
-
-            @Override
-            public String toString() {
-                return "<native fn clock>";
-            }
-        });
-        globals.define("tostring", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                return arguments.get(0).toString();
-            }
-
-            @Override
-            public int arity() {
-                return 1;
-            }
-
-            @Override
-            public String toString() {
-                return "<native fn tostring>";
-            }
-        });
-
-        globals.define("read", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                return System.console().readLine();
-            }
-
-            @Override
-            public int arity() {
-                return 0;
-            }
-
-            @Override
-            public String toString() {
-                return "<native fn read>";
-            }
-        });
-        globals.define("println", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                System.out.println(arguments.get(0));
-                return null;
-            }
-
-            @Override
-            public int arity() {
-                return 1;
-            }
-
-            @Override
-            public String toString() {
-                return "<native fn println>";
-            }
-        });
-        globals.define("print", new LoxCallable() {
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                System.out.print(arguments.get(0));
-                return null;
-            }
-
-            @Override
-            public int arity() {
-                return 1;
-            }
-
-            @Override
-            public String toString() {
-                return "<native fn print>";
-            }
-        });
+        new NativeSystem(globals);
         new NativeArrayList(globals);
         new NativeSwing(globals);
     }
