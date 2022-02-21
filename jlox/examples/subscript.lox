@@ -1,0 +1,7 @@
+#include "liblox/string.lox"
+
+var str = String("hello world");
+
+for(var i = 0; i < str.length(); i = i + 1){
+  println(tostring(i) + ": " + str.getString()[i]);
+}

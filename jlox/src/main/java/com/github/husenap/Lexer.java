@@ -34,7 +34,6 @@ public class Lexer {
     keywords.put("true", TRUE);
     keywords.put("var", VAR);
     keywords.put("while", WHILE);
-
   }
 
   public Lexer(String source) {
@@ -69,6 +68,12 @@ public class Lexer {
       break;
     case '}':
       addToken(RIGHT_BRACE);
+      break;
+    case '[':
+      addToken(LEFT_BRACKET);
+      break;
+    case ']':
+      addToken(RIGHT_BRACKET);
       break;
     case ',':
       addToken(COMMA);

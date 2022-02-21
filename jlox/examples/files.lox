@@ -1,0 +1,7 @@
+var text = read_file("test.txt");
+if(text == nil){
+  text = "hejsan";
+}else{
+  text = text + " hejsan";
+}
+write_file("test.txt", text);

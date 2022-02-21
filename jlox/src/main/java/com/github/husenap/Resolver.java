@@ -283,4 +283,11 @@ public class Resolver implements Stmt.Visitor<Void>, Expr.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visit(Expr.Subscript expr) {
+        resolve(expr.object());
+        resolve(expr.index());
+        return null;
+    }
+
 }

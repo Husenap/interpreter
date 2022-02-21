@@ -29,6 +29,9 @@ interface Expr {
     R visit(Super expr);
 
     R visit(Lambda expr);
+
+    R visit(Subscript expr);
+
   }
 
   <R> R accept(Visitor<R> v);
@@ -112,6 +115,12 @@ interface Expr {
     }
   }
   record Lambda(List<Token> params, List<Stmt> body) implements Expr {
+    @Override
+    public <R> R accept(Visitor<R> v) {
+      return v.visit(this);
+    }
+  }
+  record Subscript(Expr object, Expr index) implements Expr {
     @Override
     public <R> R accept(Visitor<R> v) {
       return v.visit(this);

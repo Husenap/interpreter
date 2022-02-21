@@ -283,12 +283,15 @@ public class Parser {
             } else if (match(DOT)) {
                 Token name = consume(IDENTIFIER, "Expect property name after '.'.");
                 expr = new Expr.Get(expr, name);
+            } else if (match(LEFT_BRACKET)) {
+                Expr index = expression();
+                expr = new Expr.Subscript(expr, index);
+                consume(RIGHT_BRACKET, "Expect ']' after subscript.");
             } else {
                 break;
             }
         }
         return expr;
-
     }
 
     private Expr finishCall(Expr callee) {

@@ -38,7 +38,7 @@ term        = factor ( ( "-" | "+" ) factor )* ;
 factor      = unary ( ( "/" | "*" ) unary )* ;
 unary       = ( "!" | "-" ) unary
             | call ;
-call        = primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
+call        = primary ( "(" arguments? ")" | "." IDENTIFIER | "[" expression "]" )* ;
 arguments   = expression ( "," expression )* ;
 lambda      = "fun" "(" parameters? ")" block ;
 primary     = NUMBER | STRING

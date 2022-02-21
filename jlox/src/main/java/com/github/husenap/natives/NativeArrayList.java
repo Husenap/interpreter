@@ -19,7 +19,7 @@ public class NativeArrayList extends Natives {
         });
         define("__array_list_get", 2, (i, args) -> {
             if (args.get(0) instanceof ArrayList) {
-                return ((ArrayList<Object>) args.get(0)).get(((Double) args.get(1)).intValue());
+                return ((ArrayList<Object>) args.get(0)).get(toInt(args.get(1)));
             }
             return null;
         });

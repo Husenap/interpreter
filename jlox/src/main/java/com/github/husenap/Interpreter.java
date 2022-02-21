@@ -12,9 +12,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private final Map<Expr, Integer> locals = new HashMap<>();
 
     public Interpreter() {
+        new NativeLibLox(globals);
         new NativeSystem(globals);
         new NativeArrayList(globals);
         new NativeSwing(globals);
+        new NativeFileIO(globals);
     }
 
     Object interpret(Expr expr) {
@@ -345,5 +347,15 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visit(Expr.Lambda expr) {
         return new LoxLambda(expr, environment);
+    }
+
+    @Override
+    public Object visit(Expr.Subscript expr) {
+        var object = evaluate(expr.object());
+        var index = evaluate(expr.index());
+        if (object instanceof String && index instanceof Number) {
+            return String.valueOf(((String) object).charAt(((Number) index).intValue()));
+        }
+        return null;
     }
 }

@@ -1,0 +1,20 @@
+class String{
+  init(string){
+    this.handle = string;
+  }
+  length(){
+    return __string_length(this.handle);
+  }
+  isEmpty(){
+    return __string_is_empty(this.handle);
+  }
+  charAt(index){
+    return __string_char_at(this.handle, index);
+  }
+  substring(start, end){
+    return __string_substring(this.handle, start, end);
+  }
+  getString(){
+    return this.handle;
+  }
+}

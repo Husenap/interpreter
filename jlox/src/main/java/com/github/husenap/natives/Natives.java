@@ -32,4 +32,8 @@ public abstract class Natives {
             }
         });
     }
+
+    protected int toInt(Object o) {
+        return ((Double) o).intValue();
+    }
 }
