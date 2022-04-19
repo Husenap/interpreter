@@ -14,6 +14,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+    defaults:
+      run:
+        shell: bash
+        working-directory: clox
+        env:
+          TEST_TMPDIR: "~/.cache/bazel"
+
 
     steps:
     - uses: actions/checkout@v3
@@ -23,10 +30,8 @@ jobs:
     - name: Mount bazel cache
       uses: actions/cache@v3
       with:
-        path: "~/.cache/bazel"
+        path: ${TEST_TMPDIR}
         key: bazel-${{ matrix.os }}
     
     - name: Test
-      shell: bash
-      working-directory: clox
       run: bazel test --test_output=all ...

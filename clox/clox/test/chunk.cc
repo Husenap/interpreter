@@ -20,16 +20,16 @@ TEST_F(ChunkTest, init) {
 }
 
 TEST_F(ChunkTest, write) {
-  writeChunk(&chunk, OP_RETURN);
+  writeChunk(&chunk, OP_RETURN, 123);
   EXPECT_EQ(chunk.count, 1);
   EXPECT_EQ(chunk.code[0], OP_RETURN);
-  writeChunk(&chunk, OP_CONSTANT);
+  writeChunk(&chunk, OP_CONSTANT, 123);
   EXPECT_EQ(chunk.count, 2);
   EXPECT_EQ(chunk.code[1], OP_CONSTANT);
 }
 
 TEST_F(ChunkTest, free) {
-  writeChunk(&chunk, OP_RETURN);
+  writeChunk(&chunk, OP_RETURN, 123);
   EXPECT_EQ(chunk.count, 1);
   EXPECT_EQ(chunk.code[0], OP_RETURN);
   freeChunk(&chunk);
