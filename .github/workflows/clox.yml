@@ -13,7 +13,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        fail-fast: false
         include:
           - os: ubuntu-latest
             cache-path: "~/.cache/bazel"
