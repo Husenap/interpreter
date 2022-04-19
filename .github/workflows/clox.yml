@@ -18,8 +18,6 @@ jobs:
       run:
         shell: bash
         working-directory: clox
-        env:
-          TEST_TMPDIR: "~/.cache/bazel"
 
 
     steps:
@@ -30,8 +28,10 @@ jobs:
     - name: Mount bazel cache
       uses: actions/cache@v3
       with:
-        path: ${TEST_TMPDIR}
+        path: "~/.cache/bazel"
         key: bazel-${{ matrix.os }}
     
     - name: Test
+      env:
+        TEST_TMPDIR: "~/.cache/bazel"
       run: bazel test --test_output=all ...
