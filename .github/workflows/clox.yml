@@ -17,10 +17,10 @@ jobs:
         include:
           - os: ubuntu-latest
             cache-path: "~/.cache/bazel/_bazel_runner"
-          - os: macos-latest
-            cache-path: "/private/var/tmp/_bazel_runner"
-          - os: windows-latest
-            cache-path: "~/_bazel_runneradmin"
+#          - os: macos-latest
+#            cache-path: "/private/var/tmp/_bazel_runner"
+#          - os: windows-latest
+#            cache-path: "~/_bazel_runneradmin"
     defaults:
       run:
         shell: bash
