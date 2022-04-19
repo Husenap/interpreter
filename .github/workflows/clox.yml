@@ -16,11 +16,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            cache-path: "~/.cache/bazel"
+            cache-path: "~/.cache/bazel/_bazel_$USER"
           - os: macos-latest
-            cache-path: "/private/var/tmp"
+            cache-path: "/private/var/tmp/_bazel_$USER"
           - os: windows-latest
-            cache-path: "$HOME"
+            cache-path: "$HOME/_bazel_$USER"
     defaults:
       run:
         shell: bash
