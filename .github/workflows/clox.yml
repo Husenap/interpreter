@@ -16,14 +16,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            cache-path: "~/.cache/bazel/_bazel_runner"
-            search-path: "~/.cache/bazel"
+            cache-path: "~/.cache/bazel"
           - os: macos-latest
-            cache-path: "/private/var/tmp/_bazel_runner"
-            search-path: "/private/var/tmp"
+            cache-path: "/private/var/tmp"
           - os: windows-latest
-            cache-path: "$HOME/_bazel_runneradmin"
-            search-path: "$USERPROFILE"
+            cache-path: "$HOME"
     defaults:
       run:
         shell: bash
@@ -42,6 +39,3 @@ jobs:
     
     - name: Test
       run: bazel test --test_output=all ...
-
-    - name: Find cache
-      run: ls -la ${{ matrix.search-path }}
