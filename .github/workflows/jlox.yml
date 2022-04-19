@@ -2,8 +2,10 @@ name: jlox
 
 on:
   push:
+    paths: [ 'jlox/**' ]
     branches: [ main ]
   pull_request:
+    paths: [ 'jlox/**' ]
     branches: [ main ]
 
 jobs:

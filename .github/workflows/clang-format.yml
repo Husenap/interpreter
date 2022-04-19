@@ -1,6 +1,8 @@
 name: clang-format
 
-on: [push]
+on:
+  push:
+    paths: [ 'clox/**' ]
 
 jobs:
   clang-format:
