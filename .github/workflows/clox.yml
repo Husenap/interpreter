@@ -35,7 +35,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ matrix.cache-path }}
-        key: bazel-${{ matrix.os }}
+        key: bazel-cache-${{ matrix.os }}
     
     - name: Test
-      run: bazel test --test_output=all ...
+      run: |
+        bazel test --test_output=all ...
+        bazel shutdown
