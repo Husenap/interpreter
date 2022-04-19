@@ -25,5 +25,6 @@ jobs:
         key: bazel
     
     - name: Test
+      shell: bash
       working-directory: clox
-      run: bazel test --test_output=all //...
+      run: bazel test --test_output=all ...
