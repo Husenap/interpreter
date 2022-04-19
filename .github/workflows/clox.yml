@@ -16,13 +16,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            cache-path: "~/.cache/bazel/_bazel_${{ runner.name }}"
+            cache-path: "~/.cache/bazel"
             search-path: "~/.cache/bazel"
           - os: macos-latest
-            cache-path: "/private/var/tmp/_bazel_${{ runner.name }}"
+            cache-path: "/private/var/tmp"
             search-path: "/private/var/tmp"
           - os: windows-latest
-            cache-path: "$HOME/_bazel_${{ runner.name }}"
+            cache-path: "$HOME"
             search-path: "$USERPROFILE"
     defaults:
       run:
@@ -37,7 +37,7 @@ jobs:
     - name: Mount bazel cache
       uses: actions/cache@v3
       with:
-        path: ${{ matrix.cache-path }}
+        path: ${{ matrix.cache-path }}/_bazel_${{ runner.name }}
         key: bazel-${{ matrix.os }}
     
     - name: Test
