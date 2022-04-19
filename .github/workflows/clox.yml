@@ -15,14 +15,14 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            cache-path: "~/.cache/bazel"
+            cache-path: "~/.cache/bazel/_bazel_${{ runner.name }}"
             search-path: "~/.cache/bazel"
           - os: macos-latest
-            cache-path: "~/.cache/bazel"
+            cache-path: "/private/var/tmp/_bazel_${{ runner.name }}"
             search-path: "/private/var/tmp"
           - os: windows-latest
-            cache-path: "~/.cache/bazel"
-            search-path: "$HOME"
+            cache-path: "$HOME/_bazel_${{ runner.name }}"
+            search-path: "$USERPROFILE"
     defaults:
       run:
         shell: bash
