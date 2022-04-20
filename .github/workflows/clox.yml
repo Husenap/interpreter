@@ -3,10 +3,7 @@ name: clox
 on:
   push:
     paths: [ 'clox/**' ]
-    branches: [ main ]
-  pull_request:
-    paths: [ 'clox/**' ]
-    branches: [ main ]
+
 
 jobs:
   build:
