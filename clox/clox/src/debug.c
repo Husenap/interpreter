@@ -7,8 +7,9 @@
 void disassembleChunk(Chunk* chunk, const char* name) {
   printf("== %s ==\n", name);
 
+  int previousLine = 0;
   for (int offset = 0; offset < chunk->count;) {
-    offset = disassembleInstruction(chunk, offset);
+    offset = disassembleInstruction(chunk, offset, &previousLine);
   }
 }
 
@@ -25,24 +26,16 @@ static int constantInstruction(const char* name, Chunk* chunk, int offset) {
   return offset + 2;
 }
 
-static void printLine(Chunk* chunk, int offset) {
-  int startOffset = 0;
-  for (int i = 0; i < chunk->lines.count; ++i) {
-    if (offset == startOffset) {
-      printf("%4d ", chunk->lines.lines[i].line);
-      return;
-    } else if (offset > startOffset && offset <= startOffset + chunk->lines.lines[i].length - 1) {
-      printf("   | ");
-      return;
-    }
-    startOffset += chunk->lines.lines[i].length;
-  }
-}
-
-int disassembleInstruction(Chunk* chunk, int offset) {
+int disassembleInstruction(Chunk* chunk, int offset, int* previousLine) {
   printf("%04d ", offset);
 
-  printLine(chunk, offset);
+  int currentLine = getLine(chunk, offset);
+  if (currentLine != *previousLine) {
+    printf("%4d ", currentLine);
+    *previousLine = currentLine;
+  } else {
+    printf("   | ");
+  }
 
   uint8_t instruction = chunk->code[offset];
   switch (instruction) {

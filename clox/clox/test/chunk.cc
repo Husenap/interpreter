@@ -28,6 +28,15 @@ TEST_F(ChunkTest, write) {
   EXPECT_EQ(chunk.code[1], OP_CONSTANT);
 }
 
+TEST_F(ChunkTest, getLine) {
+  writeChunk(&chunk, OP_CONSTANT, 1);
+  writeChunk(&chunk, OP_RETURN, 1);
+  writeChunk(&chunk, OP_RETURN, 2);
+  EXPECT_EQ(getLine(&chunk, 0), 1);
+  EXPECT_EQ(getLine(&chunk, 1), 1);
+  EXPECT_EQ(getLine(&chunk, 2), 2);
+}
+
 TEST_F(ChunkTest, free) {
   writeChunk(&chunk, OP_RETURN, 123);
   EXPECT_EQ(chunk.count, 1);
