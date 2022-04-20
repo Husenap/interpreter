@@ -25,13 +25,24 @@ static int constantInstruction(const char* name, Chunk* chunk, int offset) {
   return offset + 2;
 }
 
+static void printLine(Chunk* chunk, int offset) {
+  int startOffset = 0;
+  for (int i = 0; i < chunk->lines.count; ++i) {
+    if (offset == startOffset) {
+      printf("%4d ", chunk->lines.lines[i].line);
+      return;
+    } else if (offset > startOffset && offset <= startOffset + chunk->lines.lines[i].length - 1) {
+      printf("   | ");
+      return;
+    }
+    startOffset += chunk->lines.lines[i].length;
+  }
+}
+
 int disassembleInstruction(Chunk* chunk, int offset) {
   printf("%04d ", offset);
-  if (offset > 0 && chunk->lines[offset] == chunk->lines[offset - 1]) {
-    printf("   | ");
-  } else {
-    printf("%4d ", chunk->lines[offset]);
-  }
+
+  printLine(chunk, offset);
 
   uint8_t instruction = chunk->code[offset];
   switch (instruction) {

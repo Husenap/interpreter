@@ -3,6 +3,7 @@ cc_library(
     srcs = [
         "src/chunk.c",
         "src/debug.c",
+        "src/lines.c",
         "src/memory.c",
         "src/value.c",
     ],
@@ -10,6 +11,7 @@ cc_library(
         "include/clox/chunk.h",
         "include/clox/common.h",
         "include/clox/debug.h",
+        "include/clox/lines.h",
         "include/clox/memory.h",
         "include/clox/value.h",
     ],
@@ -30,6 +32,7 @@ cc_test(
     name = "test",
     srcs = [
         "test/chunk.cc",
+        "test/lines.cc",
         "test/value.cc",
     ],
     deps = [
