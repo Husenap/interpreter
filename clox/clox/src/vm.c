@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "clox/common.h"
+#include "clox/compiler.h"
 #include "clox/debug.h"
 
 VM vm;
@@ -44,7 +45,7 @@ static InterpretResult run() {
   for (;;) {
 #ifdef DEBUG_TRACE_EXECUTION
     printf("          ");
-    for (Value *slot = vm.stack; slot < vm.stackTop; ++slot) {
+    for (Value* slot = vm.stack; slot < vm.stackTop; ++slot) {
       printf("[");
       printValue(*slot);
       printf("] ");
@@ -87,10 +88,9 @@ static InterpretResult run() {
 #undef BINARY_OP
 }
 
-InterpretResult interpret(Chunk *chunk) {
-  vm.chunk = chunk;
-  vm.ip    = vm.chunk->code;
-  return run();
+InterpretResult interpret(const char* source) {
+  compile(source);
+  return INTERPRET_OK;
 }
 
 void push(Value value) {
