@@ -6,6 +6,7 @@ cc_library(
         "src/lines.c",
         "src/memory.c",
         "src/value.c",
+        "src/vm.c",
     ],
     hdrs = [
         "include/clox/chunk.h",
@@ -14,6 +15,7 @@ cc_library(
         "include/clox/lines.h",
         "include/clox/memory.h",
         "include/clox/value.h",
+        "include/clox/vm.h",
     ],
     includes = [
         "include",

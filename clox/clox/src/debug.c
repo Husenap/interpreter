@@ -4,13 +4,15 @@
 
 #include "clox/value.h"
 
+int previousLine = 0;
+
 void disassembleChunk(Chunk* chunk, const char* name) {
   printf("== %s ==\n", name);
 
-  int previousLine = 0;
   for (int offset = 0; offset < chunk->count;) {
-    offset = disassembleInstruction(chunk, offset, &previousLine);
+    offset = disassembleInstruction(chunk, offset);
   }
+  previousLine = 0;
 }
 
 static int simpleInstruction(const char* name, int offset) {
@@ -34,13 +36,13 @@ static int constantLongInstruction(const char* name, Chunk* chunk, int offset) {
   return offset + 4;
 }
 
-int disassembleInstruction(Chunk* chunk, int offset, int* previousLine) {
-  printf("%04d ", offset);
+int disassembleInstruction(Chunk* chunk, int offset) {
+  printf("%04X ", offset);
 
   int currentLine = getLine(chunk, offset);
-  if (currentLine != *previousLine) {
+  if (currentLine != previousLine) {
     printf("%4d ", currentLine);
-    *previousLine = currentLine;
+    previousLine = currentLine;
   } else {
     printf("   | ");
   }
@@ -51,6 +53,16 @@ int disassembleInstruction(Chunk* chunk, int offset, int* previousLine) {
     return constantInstruction("OP_CONSTANT", chunk, offset);
   case OP_CONSTANT_LONG:
     return constantLongInstruction("OP_CONSTANT_LONG", chunk, offset);
+  case OP_ADD:
+    return simpleInstruction("OP_ADD", offset);
+  case OP_SUBTRACT:
+    return simpleInstruction("OP_SUBTRACT", offset);
+  case OP_MULTIPLY:
+    return simpleInstruction("OP_MULTIPLY", offset);
+  case OP_DIVIDE:
+    return simpleInstruction("OP_DIVIDE", offset);
+  case OP_NEGATE:
+    return simpleInstruction("OP_NEGATE", offset);
   case OP_RETURN:
     return simpleInstruction("OP_RETURN", offset);
   default:
