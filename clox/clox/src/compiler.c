@@ -1,5 +1,7 @@
 #include "clox/compiler.h"
 
+#include <stdio.h>
+
 #include "clox/common.h"
 #include "clox/scanner.h"
 
