@@ -1,9 +1,11 @@
-name: Java CI with Maven
+name: jlox
 
 on:
   push:
+    paths: [ 'jlox/**' ]
     branches: [ main ]
   pull_request:
+    paths: [ 'jlox/**' ]
     branches: [ main ]
 
 jobs:
@@ -11,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
     - name: Set up JDK 17
       uses: actions/setup-java@v2
